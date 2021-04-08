@@ -2,6 +2,7 @@ const models = require('../models');
 
 const { Account } = models;
 
+
 const loginPage = (req, res) => {
   res.render('login');
 };
@@ -11,6 +12,7 @@ const signupPage = (req, res) => {
 };
 
 const logout = (req, res) => {
+  req.session.destroy();
   res.redirect('/');
 };
 
@@ -25,11 +27,12 @@ const login = (request, response) => {
     return res.status(400).json({ error: 'RAWR! All fields are required' });
   }
 
+  // account (lowercase) in authenticate() is always undefined for some reason
   return Account.AccountModel.authenticate(username, password, (err, account) => {
     if (err || !account) {
       return res.status(401).json({ error: 'Wrong username or password' });
     }
-
+    req.session.account = Account.AccountModel.toAPI(account);
     return res.json({ redirect: '/maker' });
   });
 };
@@ -61,13 +64,16 @@ const signup = (request, response) => {
 
     const savePromise = newAccount.save();
 
-    savePromise.then(() => res.json({ redirect: '/maker' }));
+    savePromise.then(() => {
+      req.session.account = Account.AccountModel.toAPI(newAccount);
+      res.json({ redirect: '/maker' });
+    });
 
     savePromise.catch((err) => {
       console.log(err);
 
       if (err.code === 11000) {
-        return res.status(400).json({ error: 'Username already in use,' });
+        return res.status(400).json({ error: 'Username already in use' });
       }
 
       return res.status(400).json({ error: 'An error occurred' });

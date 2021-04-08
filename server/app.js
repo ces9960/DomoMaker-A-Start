@@ -6,11 +6,12 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const expressHandlebars = require('express-handlebars');
+const session = require('express-session');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/DomoMaker';
-
+// const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/DomoMaker';
+const dbURL = 'mongodb+srv://ces9960:Ilikepi314@cluster0.wkw2i.mongodb.net/DomoMaker?authSource=admin&replicaSet=atlas-8034wm-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true';
 
 const mongooseOptions = {
   useNewUrlParser: true,
@@ -33,6 +34,12 @@ app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
 app.use(compression());
 app.use(bodyParser.urlencoded({
   extended: true,
+}));
+app.use(session({
+  key: 'sessionid',
+  secret: 'Domo Arigato',
+  resave: true,
+  saveUninitialized: true,
 }));
 app.engine('handlebars', expressHandlebars({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
