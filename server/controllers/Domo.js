@@ -1,45 +1,45 @@
 const models = require('../models');
 
-const Domo = models.Domo;
+const { Domo } = models;
 
-const makerPage = (req,res) => {
-    Domo.DomoModel.findByOwner(req.session.account._id, (err,docs) => {
-        if(err){
-            console.log(err);
-            return res.status(400).json({error: 'An error occurred'});
-        }
-
-        return res.render('app',{domos:docs});
-    });
-};
-
-const makeDomo = (req,res) => {
-    if(!req.body.name || !req.body.age) {
-        return res.status(400).json({error: 'RAWR! Both name and age are required'});
+const makerPage = (req, res) => {
+  Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
     }
 
-    const domoData = {
-        name: req.body.name,
-        age: req.body.age,
-        owner: req.session.account._id,
-    };
+    return res.render('app', { domos: docs });
+  });
+};
 
-    const newDomo = new Domo.DomoModel(domoData);
+const makeDomo = (req, res) => {
+  if (!req.body.name || !req.body.age) {
+    return res.status(400).json({ error: 'RAWR! Both name and age are required' });
+  }
 
-    const domoPromise = newDomo.save();
+  const domoData = {
+    name: req.body.name,
+    age: req.body.age,
+    owner: req.session.account._id,
+  };
 
-    domoPromise.then(() => res.json({redirect:'/maker'}));
+  const newDomo = new Domo.DomoModel(domoData);
 
-    domoPromise.catch((err) => {
-        console.log(err);
-        if(err.code === 11000){
-            return res.status(400).json({error: 'Domo already exists'});
-        }
+  const domoPromise = newDomo.save();
 
-        return res.status(400).json({error: 'An error occurred'});
-    });
+  domoPromise.then(() => res.json({ redirect: '/maker' }));
 
-    return domoPromise;
+  domoPromise.catch((err) => {
+    console.log(err);
+    if (err.code === 11000) {
+      return res.status(400).json({ error: 'Domo already exists' });
+    }
+
+    return res.status(400).json({ error: 'An error occurred' });
+  });
+
+  return domoPromise;
 };
 
 module.exports.makerPage = makerPage;
