@@ -111,6 +111,13 @@ var SignupWindow = function SignupWindow(props) {
   );
 };
 
+var AboutWindow = function AboutWindow(props) {
+  return (/*#__PURE__*/React.createElement("div", {
+      id: "aboutPage"
+    }, /*#__PURE__*/React.createElement("h1", null, "About DomoMaker"), /*#__PURE__*/React.createElement("h3", null, "Why does it exist?"), /*#__PURE__*/React.createElement("p", null, "The purpose of DomoMaker is to learn how to implement concepts such as databases and user accounts"), /*#__PURE__*/React.createElement("h3", null, "What can you do?"), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, "Create accounts with usernames and passwords to store in a mongoDB database"), /*#__PURE__*/React.createElement("li", null, "Log into your existing accounts using usernames/passwords stored in the database"), /*#__PURE__*/React.createElement("li", null, "Create Domos with names, ages, and levels, then store them in the database"), /*#__PURE__*/React.createElement("li", null, "View Domos that have been previously created by your account")))
+  );
+};
+
 var createLoginWindow = function createLoginWindow(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(LoginWindow, {
     csrf: csrf
@@ -119,6 +126,12 @@ var createLoginWindow = function createLoginWindow(csrf) {
 
 var createSignupWindow = function createSignupWindow(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(SignupWindow, {
+    csrf: csrf
+  }), document.querySelector("#content"));
+};
+
+var createAboutWindow = function createAboutWindow(csrf) {
+  ReactDOM.render( /*#__PURE__*/React.createElement(AboutWindow, {
     csrf: csrf
   }), document.querySelector("#content"));
 };
@@ -134,6 +147,11 @@ var setup = function setup(csrf) {
   loginButton.addEventListener("click", function (e) {
     e.preventDefault();
     createLoginWindow(csrf);
+    return false;
+  });
+  aboutButton.addEventListener("click", function (e) {
+    e.preventDefault();
+    createAboutWindow(csrf);
     return false;
   });
   createLoginWindow(csrf);

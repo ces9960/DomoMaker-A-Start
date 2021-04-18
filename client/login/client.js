@@ -76,6 +76,34 @@ const SignupWindow = (props) => {
     );
 };
 
+const AboutWindow = (props) => {
+    return(
+        <div id="aboutPage">
+        <h1>About DomoMaker</h1>
+
+        <h3>Why does it exist?</h3>
+        <p>The purpose of DomoMaker is to learn how to implement concepts such as databases and user accounts</p>
+
+        <h3>What can you do?</h3>
+        <ul>
+            <li>
+                Create accounts with usernames and passwords to store in a mongoDB database
+            </li>
+            <li>
+                Log into your existing accounts using usernames/passwords stored in the database
+            </li>
+            <li>
+                Create Domos with names, ages, and levels, then store them in the database
+            </li>
+            <li>
+                View Domos that have been previously created by your account
+            </li>
+        </ul>
+        </div>
+
+    );
+};
+
 const createLoginWindow = (csrf) => {
     ReactDOM.render(
         <LoginWindow csrf={csrf} />,
@@ -86,6 +114,13 @@ const createLoginWindow = (csrf) => {
 const createSignupWindow = (csrf) => {
     ReactDOM.render(
         <SignupWindow csrf={csrf} />,
+        document.querySelector("#content")
+    );
+};
+
+const createAboutWindow = (csrf) => {
+    ReactDOM.render(
+        <AboutWindow csrf={csrf}/>,
         document.querySelector("#content")
     );
 };
@@ -103,6 +138,12 @@ const setup = (csrf) => {
     loginButton.addEventListener("click", (e) => {
         e.preventDefault();
         createLoginWindow(csrf);
+        return false;
+    });
+
+    aboutButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        createAboutWindow(csrf);
         return false;
     });
 
